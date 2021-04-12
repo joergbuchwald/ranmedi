@@ -1,4 +1,4 @@
-# ranmedi - generating 2D random field from PSDF
+# ranmedi - generating 1D random field from PSDF
 # Contributing author: Joerg Buchwald
 # This software is distributed under the GNU General Public License
 
