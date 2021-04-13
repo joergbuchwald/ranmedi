@@ -64,7 +64,7 @@ class Ranmedi2D(ranmedi.Ranmedi):
                 self.psdf[self.lx-i-1,j] = self.fluk2(psdfi)
 
 if __name__=='__main__':
-    rm = Ranmedi2D(15, 20)
+    rm = Ranmedi2D(15, 20, lx=32, lz=32)
     rm.plot()
     rm = Ranmedi2D(15, 20, meditype="exponential")
     rm.plot()
