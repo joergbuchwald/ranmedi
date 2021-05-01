@@ -12,13 +12,13 @@ class RanmediVTU(object):
         self.lx = lx
         self.ly= ly
         self.lz = lz
-        print(f"Gerating random field for {dim} dimensions")
+        print(f"Gerating {meditype} random field for {dim} dimensions")
         if dim == 1:
-            self.rm = ranmedi1D.Ranmedi1D(xi,eps,lx=lx,kappa=0.1, seed=42, meditype="gaussian")
+            self.rm = ranmedi1D.Ranmedi1D(xi,eps,lx=lx,kappa=kappa, seed=seed, meditype=meditype)
         elif dim == 2:
-            self.rm = ranmedi2D.Ranmedi2D(xi,eps,lx=lx, lz=ly, kappa=0.1, seed=42, meditype="gaussian")
+            self.rm = ranmedi2D.Ranmedi2D(xi,eps,lx=lx, lz=ly, kappa=kappa, seed=seed, meditype=meditype)
         elif dim == 3:
-            self.rm = ranmedi3D.Ranmedi3D(xi,eps,lx=lx, ly=ly, lz=lz, kappa=0.1, seed=42, meditype="gaussian")
+            self.rm = ranmedi3D.Ranmedi3D(xi,eps,lx=lx, ly=ly, lz=lz, kappa=kappa, seed=seed, meditype=meditype)
         print("reading in VTU file")
         self.vtufile = vtuIO.VTUIO(vtufile)
         self.points = self.vtufile.points
@@ -77,12 +77,16 @@ class RanmediVTU(object):
         print(f"interpolation took {diff}s")
         return field
 
-    def writefield(self,fieldname, ofilename):
+    def writefield(self,fieldname, ofilename, celldata=False):
         print("writing VTU file")
         self.vtufile.writeField(self.field, fieldname, ofilename)
+        if celldata is True:
+            self.vtufile.pointdata2celldata(fieldname, ofilename)
+
 
 if __name__== '__main__':
-    rm = RanmediVTU("square2d.vtu")
-    rm.writefield("gaussian_field", "square2d_random.vtu")
-    rm = RanmediVTU("cube3d.vtu", dim=3)
-    rm.writefield("gaussian_field", "cube3d_random.vtu")
+    for i in range(6):
+        rm = RanmediVTU("square2d_random.vtu", xi=12, seed=i)
+        rm.writefield(f"gaussian_field_{i}", "square2d_random.vtu", celldata=True)
+  #  rm = RanmediVTU("cube3d.vtu", dim=3)
+  #  rm.writefield("gaussian_field", "cube3d_random.vtu")

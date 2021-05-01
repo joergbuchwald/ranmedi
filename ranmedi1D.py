@@ -12,7 +12,7 @@ class Ranmedi1D(ranmedi.Ranmedi):
         self.eps = eps
         self.kappa = kappa
         self.lx = lx
-        np.random.seed(42)
+        np.random.seed(seed)
         self.psdf = np.zeros(lx, dtype=np.complex128)
         if meditype == "gaussian":
             self.gaussian()

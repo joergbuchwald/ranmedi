@@ -12,7 +12,7 @@ class Ranmedi(object):
         self.lx = lx
         self.ly = ly
         self.lz = lz
-        np.random.seed(42)
+        np.random.seed(seed)
     @property
     def random(self):
         return 2*np.pi*(np.random.rand()-0.5)

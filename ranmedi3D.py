@@ -15,7 +15,7 @@ class Ranmedi3D(ranmedi.Ranmedi):
         self.lx = lx
         self.ly = ly
         self.lz = lz
-        np.random.seed(42)
+        np.random.seed(seed)
         self.psdf = np.zeros((lx,ly, lz), dtype=np.complex128)
         if meditype == "gaussian":
             self.gaussian()
