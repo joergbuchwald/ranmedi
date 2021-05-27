@@ -37,7 +37,7 @@ class RanmediVTU(object):
         x_max = np.max(self.points[:,0])
         y_offset = np.min(self.points[:,1])
         y_max = np.max(self.points[:,1])
-        X_predict = self.points
+        X_predict = self.points.copy()
         X_predict[:,0] = self.points[:,0] - x_offset
         X_predict[:,0] = (X_predict[:,0] * self.lx / (x_max-x_offset))
         X_predict[:,1] = self.points[:,1] - y_offset
@@ -62,7 +62,7 @@ class RanmediVTU(object):
         y_max = np.max(self.points[:,1])
         z_offset = np.min(self.points[:,2])
         z_max = np.max(self.points[:,2])
-        X_predict = self.points
+        X_predict = self.points.copy()
         X_predict[:,0] = self.points[:,0] - x_offset
         X_predict[:,0] = (X_predict[:,0] * (self.lx-1) / (x_max-x_offset))
         X_predict[:,1] = self.points[:,1] - y_offset
@@ -79,14 +79,18 @@ class RanmediVTU(object):
 
     def writefield(self,fieldname, ofilename, celldata=False):
         print("writing VTU file")
-        self.vtufile.writeField(self.field, fieldname, ofilename)
+        self.vtufile.write_field(self.field, fieldname, ofilename)
         if celldata is True:
-            self.vtufile.pointdata2celldata(fieldname, ofilename)
+            self.vtufile.point_data_to_cell_data(fieldname, ofilename)
 
 
 if __name__== '__main__':
-    for i in range(6):
-        rm = RanmediVTU("square2d_random.vtu", xi=12, seed=i)
-        rm.writefield(f"gaussian_field_{i}", "square2d_random.vtu", celldata=True)
-  #  rm = RanmediVTU("cube3d.vtu", dim=3)
-  #  rm.writefield("gaussian_field", "cube3d_random.vtu")
+  #  for i in range(6):
+  #      rm = RanmediVTU("square2d_random.vtu", xi=12, seed=i)
+  #      rm.writefield(f"gaussian_field_{i}", "square2d_random.vtu", celldata=True)
+    rm = RanmediVTU("tunnel.vtu", xi=10, lx=128,ly=128, eps=1, dim=2)
+    porosityfield = rm.field+0.18
+    permeabilityfield = 2.1407407407407408e-15 * porosityfield**3/(1-porosityfield)**2
+    rm.vtufile.write_field(porosityfield,"porosity", "tunnel_random.vtu")
+    rm.vtufile.write_field(permeabilityfield, "permeability", "tunnel_random.vtu")
+    rm.vtufile.point_data_to_cell_data("permeability", "tunnel_random.vtu")
